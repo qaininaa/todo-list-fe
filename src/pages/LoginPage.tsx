@@ -1,20 +1,24 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Input from "../components/ui/Input";
 import AuthLayout from "../layouts/AuthLayout";
 import axiosInstance from "../api/axios";
 import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 
-interface IloginForm {
-  username: string;
-  password: string;
-}
+const loginFormSchema = z.object({
+  username: z.string().nonempty("Username is required"),
+  password: z.string().nonempty("Password is required"),
+});
+
+type IloginForm = z.infer<typeof loginFormSchema>;
 
 const LoginPage = () => {
-  const { register, handleSubmit } = useForm({
-    defaultValues: {
-      username: "",
-      password: "",
-    },
+  const [err, setErr] = useState<string>("");
+  const navigate = useNavigate();
+  const { register, handleSubmit, formState } = useForm({
+    resolver: zodResolver(loginFormSchema),
   });
 
   const onSubmit = async (values: IloginForm) => {
@@ -24,9 +28,12 @@ const LoginPage = () => {
         password: values.password,
       });
 
-      console.log(res);
+      setErr("");
+      navigate("/");
     } catch (error) {
-      console.log(error);
+      if (error.response.status === 500) {
+        setErr(error.response.data.errorMessage);
+      }
     }
   };
   return (
@@ -40,6 +47,13 @@ const LoginPage = () => {
             type="text"
             placeholder="Masukkan username"
             {...register("username")}
+            err={
+              formState.errors.username && (
+                <p className="text-sm text-red-500">
+                  {formState.errors.username.message}
+                </p>
+              )
+            }
           />
           <Input
             label="Password"
@@ -47,6 +61,13 @@ const LoginPage = () => {
             type="password"
             placeholder="***"
             {...register("password")}
+            err={
+              formState.errors.password && (
+                <p className="text-sm text-red-500">
+                  {formState.errors.password.message}
+                </p>
+              )
+            }
           />
           <button
             type="submit"
@@ -56,6 +77,9 @@ const LoginPage = () => {
             Login
           </button>
         </form>
+        {err !== "" && (
+          <p className="text-center text-sm text-red-500">{err}</p>
+        )}
         <p>
           Don't have an Account?{" "}
           <Link to="/register" className="text-blue-500 font-semibold">
