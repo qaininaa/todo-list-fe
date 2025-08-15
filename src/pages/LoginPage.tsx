@@ -5,7 +5,8 @@ import axiosInstance from "../api/axios";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { AuthContext } from "../context/auth/AuthContext";
 
 const loginFormSchema = z.object({
   username: z.string().nonempty("Username is required"),
@@ -16,6 +17,7 @@ type IloginForm = z.infer<typeof loginFormSchema>;
 
 const LoginPage = () => {
   const [err, setErr] = useState<string>("");
+  const auth = useContext(AuthContext);
   const navigate = useNavigate();
   const { register, handleSubmit, formState } = useForm({
     resolver: zodResolver(loginFormSchema),
@@ -27,7 +29,7 @@ const LoginPage = () => {
         username: values.username,
         password: values.password,
       });
-
+      auth?.setUser(res.data.accessToken);
       setErr("");
       navigate("/");
     } catch (error) {
@@ -36,6 +38,7 @@ const LoginPage = () => {
       }
     }
   };
+
   return (
     <AuthLayout>
       <div className="border border-black rounded-md p-3">
