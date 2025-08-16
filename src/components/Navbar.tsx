@@ -26,7 +26,9 @@ const Navbar = ({ isOpen, onClick }: IPropsNavbar) => {
         >
           <div className="flex justify-between">
             <h1>DASHBOARD</h1>
-            <button onClick={onClick}>X</button>
+            <button onClick={onClick} className="cursor-pointer">
+              X
+            </button>
           </div>
           <NavMenu />
         </motion.div>

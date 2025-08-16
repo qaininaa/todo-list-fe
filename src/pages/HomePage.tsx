@@ -9,7 +9,7 @@ const HomePage = () => {
       <header className="flex justify-between bg-[#F8F8F8] p-2">
         <div className="flex items-center gap-1">
           <button onClick={() => setIsOpen(!isOpen)}>
-            <img src={MenuBurger} />
+            <img src={MenuBurger} className="cursor-pointer" />
           </button>
 
           <p>DashBoard</p>
