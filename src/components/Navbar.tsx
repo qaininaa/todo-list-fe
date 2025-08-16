@@ -48,7 +48,9 @@ const NavMenu = () => {
           <li>Vital Task</li>
           <li>My Task</li>
           <li>Task Categories</li>
-          <li>Settings</li>
+          <li>
+            <Link to="/profile">Profile</Link>
+          </li>
           <li>Help</li>
           <li>Logout</li>
         </ul>
@@ -56,7 +58,6 @@ const NavMenu = () => {
         <ul>
           <li>Dashboard</li>
           <li>Task Categories</li>
-          <li>Settings</li>
           <li>Help</li>
           <li>
             <Link to="/login">Login</Link>
