@@ -6,11 +6,16 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import HomePage from "./pages/HomePage";
 import AuthProvider from "./context/auth/AuthProvider";
+import ProfilePage from "./pages/ProfilePage";
 
 const router = createBrowserRouter([
   {
     path: "",
     Component: HomePage,
+  },
+  {
+    path: "/profile",
+    Component: ProfilePage,
   },
   {
     path: "/login",
