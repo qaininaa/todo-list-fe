@@ -1,19 +1,33 @@
 import { useState, type ReactNode } from "react";
 import { AuthContext } from "./AuthContext";
 
+export interface Auth {
+  accessToken: string;
+}
+
 const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<string | null>(null);
+  const [auth, setAuth] = useState<Auth | null>(null);
 
   const login = (accessToken: string) => {
-    setUser(accessToken);
+    setAuth((prev) => ({
+      ...(prev ?? {}),
+      accessToken,
+    }));
+  };
+
+  const refresh = (accessToken: string) => {
+    setAuth((prev) => ({
+      ...(prev ?? {}),
+      accessToken,
+    }));
   };
 
   const logout = () => {
-    setUser(null);
+    setAuth(null);
   };
 
   return (
-    <AuthContext.Provider value={{ setUser, login, logout, user }}>
+    <AuthContext.Provider value={{ setAuth, login, logout, auth, refresh }}>
       {children}
     </AuthContext.Provider>
   );
