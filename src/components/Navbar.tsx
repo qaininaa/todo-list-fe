@@ -1,6 +1,4 @@
 import { motion, AnimatePresence } from "motion/react";
-import { useContext } from "react";
-import { AuthContext } from "../context/auth/AuthContext";
 import { Link } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 
