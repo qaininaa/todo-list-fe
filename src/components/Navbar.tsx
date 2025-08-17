@@ -1,7 +1,6 @@
 import { motion, AnimatePresence } from "motion/react";
-import { useContext } from "react";
-import { AuthContext } from "../context/auth/AuthContext";
 import { Link } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
 
 interface IPropsNavbar {
   isOpen: boolean;
@@ -38,11 +37,11 @@ const Navbar = ({ isOpen, onClick }: IPropsNavbar) => {
 };
 
 const NavMenu = () => {
-  const auth = useContext(AuthContext);
+  const auth = useAuth();
 
   return (
     <nav className="bg-red-100 text-center mt-10">
-      {auth?.user ? (
+      {auth?.auth?.accessToken ? (
         <ul>
           <li>Dashboard</li>
           <li>Vital Task</li>
