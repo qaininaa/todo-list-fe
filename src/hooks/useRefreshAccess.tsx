@@ -6,14 +6,13 @@ const useRefreshAccess = () => {
 
   const refreshToken = async () => {
     try {
-      const response = await axiosInstance.get("/users/refresh");
+      const response = await axiosInstance.get("/api/auth/refresh");
+      const token = await response.data.accessToken;
+      console.log("ini token", token);
 
-      if (response) {
-        auth?.refresh(response.data.accessToken);
-      }
-      return response.data.accessToken;
+      return token;
     } catch (error) {
-      throw new Error(error);
+      console.info(error);
     }
   };
 
