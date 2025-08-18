@@ -1,19 +1,26 @@
 import { useEffect, useState } from "react";
 import useAuth from "../hooks/useAuth";
-import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
+import useAxiosInstance from "../hooks/useAxiosInstance";
+
+interface User {
+  name: string;
+  username: string;
+  email: string;
+  iat: number;
+  exp: number;
+}
 
 const ProfilePage = () => {
-  const [user, setUser] = useState();
+  const navigate = useNavigate();
   const auth = useAuth();
+  const axios = useAxiosInstance();
 
-  useEffect(() => {
-    if (auth?.auth !== null) {
-      const decoded = jwtDecode(auth?.auth?.accessToken as string);
-      setUser(decoded);
-    }
-  }, [auth]);
-
-  return <div>{user && <p>{user}</p>}</div>;
+  return (
+    <div>
+      <button onClick={() => navigate("/")}>home</button>
+    </div>
+  );
 };
 
 export default ProfilePage;
