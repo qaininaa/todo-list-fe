@@ -39,7 +39,9 @@ const useAxiosInstance = () => {
       axiosInstance.interceptors.request.eject(requestInterceptor);
       axiosInstance.interceptors.response.eject(responseInterceptor);
     };
-  }, [auth, refresh]);
+  }, [auth?.auth?.accessToken, refresh]);
+
+  return axiosInstance;
 };
 
 export default useAxiosInstance;
