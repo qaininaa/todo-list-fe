@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useAxiosInstance from "../hooks/useAxiosInstance";
 import useAuth from "../hooks/useAuth";
+import useRefreshAccess from "../hooks/useRefreshAccess";
+import axiosInstance from "../api/axios";
+import axios from "axios";
 
 interface User {
   name: string;
@@ -16,27 +19,26 @@ const ProfilePage = () => {
   const navigate = useNavigate();
   const axios = useAxiosInstance();
   const auth = useAuth();
+  const [mounted, setMounted] = useState(true);
+  const refresh = useRefreshAccess();
 
   useEffect(() => {
-    const controller = new AbortController();
-    const signal = controller.signal;
-    const fetchData = async () => {
+    console.log("ProfilePage mounted ✅");
+
+    const checkRefresh = async () => {
       try {
-        const data = await axios.get("api/profile/user", { signal });
-        console.log(data);
-      } catch (error) {
-        console.log(error);
+        const res = await axios.get(`http://localhost:3000/api/auth/refresh`, {
+          withCredentials: true,
+        });
+
+        console.info("New Access Token:", res.data.accessToken);
+      } catch (err) {
+        console.error("Refresh failed:", err);
       }
     };
-    fetchData();
 
-    return () => controller.abort();
-  }, [axios]);
-
-  useEffect(() => {
-    console.log(auth);
-  }, [auth]);
-
+    checkRefresh();
+  }, []);
   return (
     <div>
       <button onClick={() => navigate("/")}>home</button>
