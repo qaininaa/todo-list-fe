@@ -23,6 +23,13 @@ const useAxiosInstance = () => {
         const prevRequest = error?.config;
 
         /**
+         * Prevent infinite loop by not retrying refresh endpoint
+         */
+        if (prevRequest?.url === "/api/auth/refresh") {
+          return Promise.reject(error);
+        }
+
+        /**
          * Check if error is 401 (Unauthorized) or 403 (Forbidden) and request hasn't been retried
          */
         if (

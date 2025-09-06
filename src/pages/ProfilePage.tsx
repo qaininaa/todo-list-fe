@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useAxiosInstance from "../hooks/useAxiosInstance";
 import useAuth from "../hooks/useAuth";
+import { AxiosError } from "axios";
 
 /**
  * Interface for user profile data
@@ -25,6 +26,7 @@ interface User {
  * - Handles loading states
  * - Automatically retries requests on token expiration
  * - Prevents memory leaks with cleanup
+ * - Redirects to login on 401 unauthorized errors
  */
 const ProfilePage = () => {
   // Navigation hook for routing
@@ -71,6 +73,12 @@ const ProfilePage = () => {
           setProfile(response.data.user);
         }
       } catch (error) {
+        // Handle 401 unauthorized errors by redirecting to login
+        if (error instanceof AxiosError && error.response?.status === 401) {
+          navigate("/login");
+          return;
+        }
+
         // Only log errors if component is mounted and not an abort error
         if (
           mounted &&
@@ -97,7 +105,7 @@ const ProfilePage = () => {
       mounted = false;
       controller.abort();
     };
-  }, [axios, auth]); // Dependencies: re-run when axios or auth changes
+  }, [axios, auth, navigate]); // Dependencies: re-run when axios, auth, or navigate changes
 
   /**
    * Render loading state while data is being fetched
