@@ -19,7 +19,9 @@ const ProfilePage = () => {
         console.log("ini response profile", response);
 
         mounted && setProfile(response.data.user);
-      } catch (error) {}
+      } catch (error) {
+        console.error(error);
+      }
     };
     fetchData();
 
