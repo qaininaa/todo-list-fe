@@ -32,17 +32,25 @@ const useAxiosInstance = () => {
         ) {
           prevRequest.sent = true;
 
-          /**
-           * Attempt to refresh the access token
-           */
-          const newAccessToken = await refresh();
+          try {
+            /**
+             * Attempt to refresh the access token
+             */
+            const newAccessToken = await refresh();
 
-          /**
-           * If refresh successful, retry the original request with new token
-           */
-          if (newAccessToken) {
-            prevRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-            return axiosInstance(prevRequest);
+            /**
+             * If refresh successful, retry the original request with new token
+             */
+            if (newAccessToken) {
+              prevRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+              return axiosInstance(prevRequest);
+            }
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          } catch (refreshError) {
+            /**
+             * If refresh also fails, return original error
+             */
+            return Promise.reject(error);
           }
         }
         return Promise.reject(error);

@@ -28,16 +28,16 @@ const useRefreshAccess = () => {
        */
       if (newAccessToken) {
         auth?.refresh(newAccessToken);
+        return newAccessToken;
       }
 
-      return newAccessToken;
+      return null;
     } catch (error) {
       /**
        * If refresh fails, logout user and clear auth state
        */
-      console.error("Token refresh failed:", error);
       auth?.logout();
-      return null;
+      throw error;
     }
   };
 
