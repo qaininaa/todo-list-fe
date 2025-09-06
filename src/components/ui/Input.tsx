@@ -1,9 +1,11 @@
+import React from "react";
+
 interface InterfaceInput {
   label: string;
   type: string;
   id: string;
   placeholder?: string;
-  err?: any;
+  err?: React.ReactNode;
 }
 
 const Input = ({

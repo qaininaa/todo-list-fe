@@ -7,6 +7,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import useAuth from "../hooks/useAuth";
 import { useEffect, useState } from "react";
+import { AxiosError } from "axios";
 
 const loginFormSchema = z.object({
   username: z.string().nonempty("Username is required"),
@@ -33,7 +34,7 @@ const LoginPage = () => {
       setErr("");
       navigate("/");
     } catch (error) {
-      if (error.response.status === 500) {
+      if (error instanceof AxiosError && error.response?.status === 500) {
         setErr(error.response.data.errorMessage);
       }
     }
